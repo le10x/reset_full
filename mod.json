@@ -6,9 +6,16 @@
                 "mac": "2.2081",
                 "ios": "2.2081"
         },
-        "id": "le10x.reset_full",
-        "name": "Reset Full",
+        "id": "le10x.custom_text",
+        "name": "Custom Text",
         "version": "1.0.0",
         "developer": "le10x",
-        "description": "MOD DESCRIPTION"
+        "description": "MOD DESCRIPTION",
+        "settings": {
+            "mi-texto-personalizado": {
+                "name": "Texto en Pantalla",
+                "description": "Escribe lo que quieres ver en todos los niveles",
+                "type": "string",
+                "default": "Texto Blanco y <cy>Dorado</c>"
+    }
 }
