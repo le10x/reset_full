@@ -9,46 +9,48 @@ class $modify(PlayLayer) {
 
         auto mod = Mod::get();
         
-        // Cargar configuraciones
-        std::string txtPusab = mod->getSettingValue<std::string>("texto-pusab");
-        std::string txtChat = mod->getSettingValue<std::string>("texto-chat");
-        float posX = mod->getSettingValue<double>("pos-x");
-        float posY = mod->getSettingValue<double>("pos-y");
-        float escala = mod->getSettingValue<double>("escala");
-        float opacidad = mod->getSettingValue<double>("opacidad") * 255.0f; // Convertir 0-1 a 0-255
+        // Cargar valores y convertir de escala 0-100 a lo que necesita el código
+        std::string txtBlanco = mod->getSettingValue<std::string>("texto-blanco");
+        std::string txtDorado = mod->getSettingValue<std::string>("texto-dorado");
+        float posX = mod->getSettingValue<double>("pos-x") / 100.0f;
+        float posY = mod->getSettingValue<double>("pos-y") / 100.0f;
+        float escala = mod->getSettingValue<double>("escala") / 100.0f;
+        float opacidad = (mod->getSettingValue<double>("opacidad") / 100.0f) * 255.0f;
+        bool invertir = mod->getSettingValue<bool>("invertir-orden");
+        bool detras = mod->getSettingValue<bool>("detras-bloques");
 
-        // Crear el nodo contenedor para mover ambos textos como uno solo
         auto container = CCNode::create();
         
-        // Label 1: Pusab (Dorado)
-        auto label1 = CCLabelBMFont::create(txtPusab.c_str(), "goldFont.fnt");
-        label1->setScale(escala);
-        label1->setOpacity(static_cast<GLubyte>(opacidad));
-        label1->setAnchorPoint({0, 0.5f}); // Anclaje a la izquierda
+        // Crear ambos labels con fuente Pusab (bigFont es blanca, goldFont es dorada)
+        auto labelB = CCLabelBMFont::create(txtBlanco.c_str(), "bigFont.fnt");
+        auto labelD = CCLabelBMFont::create(txtDorado.c_str(), "goldFont.fnt");
 
-        // Label 2: Chat (Blanco)
-        auto label2 = CCLabelBMFont::create(txtChat.c_str(), "chatFont.fnt");
-        label2->setScale(escala);
-        label2->setOpacity(static_cast<GLubyte>(opacidad));
-        label2->setAnchorPoint({0, 0.5f});
+        labelB->setScale(escala);
+        labelD->setScale(escala);
+        labelB->setOpacity(static_cast<GLubyte>(opacidad));
+        labelD->setOpacity(static_cast<GLubyte>(opacidad));
 
-        // Posicionar el segundo label justo después del primero
-        float spacing = 5.0f * escala; // Espacio entre palabras
-        label2->setPositionX(label1->getContentSize().width * escala + spacing);
+        // Determinar quién va primero
+        CCLabelBMFont* primero = invertir ? labelB : labelD;
+        CCLabelBMFont* segundo = invertir ? labelD : labelB;
 
-        // Añadir al contenedor
-        container->addChild(label1);
-        container->addChild(label2);
+        primero->setAnchorPoint({0, 0.5f});
+        segundo->setAnchorPoint({0, 0.5f});
 
-        // Calcular ancho total para centrar el contenedor
-        float totalWidth = label2->getPositionX() + (label2->getContentSize().width * escala);
-        container->setContentSize({totalWidth, label1->getContentSize().height * escala});
-        
-        // Posicionar contenedor en pantalla
+        float spacing = 10.0f * escala;
+        segundo->setPositionX(primero->getContentSize().width * escala + spacing);
+
+        container->addChild(primero);
+        container->addChild(segundo);
+
+        // Centrado y Posición
+        float totalWidth = segundo->getPositionX() + (segundo->getContentSize().width * escala);
         auto winSize = CCDirector::sharedDirector()->getWinSize();
         container->setPosition({ winSize.width * posX - (totalWidth / 2), winSize.height * posY });
 
-        this->addChild(container, 100);
+        // Z-Order: -1 para estar detrás de los bloques, o 100 para estar al frente (UI)
+        int zOrder = detras ? -1 : 100;
+        this->addChild(container, zOrder);
 
         return true;
     }
