@@ -1,38 +1,24 @@
 #include <Geode/Geode.hpp>
-#include <Geode/modify/PauseLayer.hpp>
+#include <Geode/modify/PlayLayer.hpp>
 
 using namespace geode::prelude;
 
-class $modify(MyPauseLayer, PauseLayer) {
-    void customSetup() {
-        PauseLayer::customSetup();
-        
-        // 1. Localizar el menú de botones
-        auto menu = this->getChildByID("right-button-menu"); // O el ID correspondiente
-        
-        // 2. Crear el sprite y el botón
-        auto spr = ButtonSprite::create("TOTAL RESET", "goldFont.fnt", "GJ_button_01.png", .8f);
-        auto btn = CCMenuItemSpriteExtra::create(
-            spr, this, menu_selector(MyPauseLayer::onFullReset)
-        );
-        
-        // 3. Añadir al menú
-        menu->addChild(btn);
-        menu->updateLayout();
-    }
+class $modify(PlayLayer) {
+    bool init(GJGameLevel* level, bool useReplay, bool dontSave) {
+        if (!PlayLayer::init(level, useReplay, dontSave)) return false;
 
-    void onFullReset(CCObject* sender) {
-        auto pl = PlayLayer::get();
-        if (!pl) return;
+        // 1. Obtener el texto de la configuración
+        std::string texto = Mod::get()->getSettingValue<std::string>("mi-texto-personalizado");
 
-        // Obtener los datos del nivel actual
-        auto level = pl->m_level;
-
-        // Resetear intentos manualmente en los datos del nivel
-        level->m_attempts = 0; 
+        // 2. Crear el label (usando RichText o múltiples labels para colores)
+        auto label = CCLabelBMFont::create(texto.c_str(), "goldFont.fnt");
         
-        // Crear una nueva escena de PlayLayer con el nivel "limpio"
-        auto newScene = PlayLayer::scene(level, false, false);
-        CCDirector::sharedDirector()->replaceScene(CCTransitionFade::create(0.5f, newScene));
+        // Posicionamiento (ejemplo: esquina superior izquierda)
+        auto winSize = CCDirector::sharedDirector()->getWinSize();
+        label->setPosition({winSize.width / 2, winSize.height - 20});
+        
+        this->addChild(label, 100);
+
+        return true;
     }
 };
