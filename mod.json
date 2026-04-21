@@ -17,5 +17,6 @@
                 "description": "Escribe lo que quieres ver en todos los niveles",
                 "type": "string",
                 "default": "Texto Blanco y <cy>Dorado</c>"
-    }
+            }
+      }
 }
