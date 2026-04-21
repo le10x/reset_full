@@ -7,15 +7,16 @@ class $modify(PlayLayer) {
     bool init(GJGameLevel* level, bool useReplay, bool dontSave) {
         if (!PlayLayer::init(level, useReplay, dontSave)) return false;
 
-        // 1. Obtener el texto de la configuración
-        std::string texto = Mod::get()->getSettingValue<std::string>("mi-texto-personalizado");
+        std::string miTexto = Mod::get()->getSettingValue<std::string>("mi-texto-personalizado");
 
-        // 2. Crear el label (usando RichText o múltiples labels para colores)
-        auto label = CCLabelBMFont::create(texto.c_str(), "goldFont.fnt");
+        // MDTextArea soporta etiquetas de color automáticamente
+        auto label = MDTextArea::create(miTexto, {200.f, 50.f});
         
-        // Posicionamiento (ejemplo: esquina superior izquierda)
         auto winSize = CCDirector::sharedDirector()->getWinSize();
-        label->setPosition({winSize.width / 2, winSize.height - 20});
+        label->setPosition({winSize.width / 2, winSize.height - 30.f});
+        
+        // Esto quita el fondo oscuro que trae por defecto
+        label->getBGSprite()->setVisible(false); 
         
         this->addChild(label, 100);
 
