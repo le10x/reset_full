@@ -12,32 +12,23 @@
         "developer": "le10x",
         "description": "MOD DESCRIPTION",
         "settings": {
-            "texto-pusab": {
-                "name": "Texto Pusab (Dorado)",
-                "type": "string",
-                "default": "NIVEL"
-        },
-            "texto-chat": {
-                "name": "Texto Chat (Blanco)",
-                "type": "string",
-                "default": "completado"
-        },
-            "pos-x": { "name": "Posición X", "type": "float", "default": 0.5, "min": 0.0, "max": 1.0 },
-            "pos-y": { "name": "Posición Y", "type": "float", "default": 0.9, "min": 0.0, "max": 1.0 },
-            "escala": {
-                "name": "Tamaño del Texto",
-                "type": "float",
-                "default": 0.7,
-                "min": 0.1,
-                "max": 2.0
-        },
-            "opacidad": {
-                "name": "Opacidad",
-                "type": "float",
-                "default": 1.0,
-                "min": 0.0,
-                "max": 1.0,
-                "description": "0 es invisible, 1 es sólido"
+            "texto-blanco": { "name": "Texto Blanco (Pusab)", "type": "string", "default": "Nivel" },
+            "texto-dorado": { "name": "Texto Dorado (Pusab)", "type": "string", "default": "Extremo" },
+            "pos-x": { "name": "Posición X", "type": "float", "default": 50.0, "min": 0.0, "max": 100.0 },
+            "pos-y": { "name": "Posición Y", "type": "float", "default": 90.0, "min": 0.0, "max": 100.0 },
+            "escala": { "name": "Tamaño", "type": "float", "default": 70.0, "min": 0.0, "max": 200.0 },
+            "opacidad": { "name": "Opacidad", "type": "float", "default": 100.0, "min": 0.0, "max": 100.0 },
+            "invertir-orden": {
+                "name": "Dorado después de Blanco",
+                "description": "Si está activo, el texto dorado irá a la derecha.",
+                "type": "bool",
+                "default": true
+            },
+            "detras-bloques": {
+                "name": "Detrás de los bloques",
+                "description": "El texto se verá detrás de los objetos del nivel.",
+                "type": "bool",
+                "default": false
             }
       }
 }
